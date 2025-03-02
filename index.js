@@ -7,7 +7,7 @@ app.use(cors());
 app.use(express.json());
 require('dotenv').config();
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion , ObjectId } = require('mongodb');
 
 const uri = `mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/?retryWrites=true&w=majority&appName=${process.env.MONGO_APP_NAME}`;
 
@@ -27,6 +27,21 @@ async function run() {
         app.get('/users' , async(req ,res) => {
             const user = await userCollection.find().toArray();
             res.send(user);
+        });
+
+        app.post('/users' , async(req , res) => {
+            const user = req.body;
+            console.log(user);
+            const result = await userCollection.insertOne(user);
+            res.send(result);
+        });
+    
+        app.delete('/users/:id' , async(req ,res) => {
+            const id = req.params.id;
+            // console.log(`delete request has come`);
+            const query = {_id : new ObjectId(id)}
+            const result = await userCollection.deleteOne(query);
+            res.send(result);
         });
 
         // Send a ping to confirm a successful connection

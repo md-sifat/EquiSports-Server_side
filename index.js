@@ -23,7 +23,10 @@ async function run() {
     try {
         // Connect the client to the server	(optional starting in v4.7)
         await client.connect();
+
         const userCollection = client.db(process.env.MONGO_DB_NAME).collection("users");
+        const equipmentCollection = db.collection("equipments");
+
         app.get('/users' , async(req ,res) => {
             const user = await userCollection.find().toArray();
             res.send(user);
@@ -43,6 +46,25 @@ async function run() {
             const result = await userCollection.deleteOne(query);
             res.send(result);
         });
+
+        app.get('/equipments', async (req, res) => {
+            const equipments = await equipmentCollection.find().toArray();
+            res.send(equipments);
+        });
+
+        app.post('/equipments', async (req, res) => {
+            const equipment = req.body;
+            const result = await equipmentCollection.insertOne(equipment);
+            res.send(result);
+        });
+
+
+
+
+
+
+
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });

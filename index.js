@@ -25,7 +25,7 @@ async function run() {
         await client.connect();
 
         const userCollection = client.db(process.env.MONGO_DB_NAME).collection("users");
-        const equipmentCollection = db.collection("equipments");
+        const equipmentCollection = client.db(process.env.MONGO_DB_NAME).collection("equipments");
 
         app.get('/users' , async(req ,res) => {
             const user = await userCollection.find().toArray();

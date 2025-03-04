@@ -65,9 +65,14 @@ async function run() {
             res.send(result);
         });
 
-
-
-
+        app.put('/equipments/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedEquipment = req.body;
+            const filter = { _id: new ObjectId(id) };
+            const updateDoc = { $set: updatedEquipment };
+            const result = await equipmentCollection.updateOne(filter, updateDoc);
+            res.send(result);
+        });
 
 
         // Send a ping to confirm a successful connection
